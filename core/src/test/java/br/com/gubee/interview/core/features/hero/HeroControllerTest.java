@@ -170,7 +170,7 @@ class HeroControllerTest {
                 .dexterity(5)
                 .enabled(true).build();
         //when
-        ResponseEntity<?> response = subject.update(FIXED_UUID, updateHero);
+        ResponseEntity<?> response = subject.update(UUID.randomUUID(), updateHero);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -180,9 +180,8 @@ class HeroControllerTest {
     @Test
     void shouldDeleteAHero_WhenADeleteHeroRequestWasMadeWithAExistentUuid_ThenNoContentStatusCode() {
         // given
-        UUID idToDelete = UUID.randomUUID();
         // when
-        ResponseEntity<?> delete = subject.delete(idToDelete);
+        ResponseEntity<?> delete = subject.delete(FIXED_UUID);
         // then
         assertThat(delete.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(delete.getBody()).isNull();
