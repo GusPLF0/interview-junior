@@ -1,5 +1,6 @@
 package br.com.gubee.interview.core.features.powerstats;
 
+import br.com.gubee.interview.core.features.powerstats.interfaces.PowerStatsRepository;
 import br.com.gubee.interview.model.PowerStats;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class PowerStatsRepository {
+public class PowerStatsRepositoryImpl implements PowerStatsRepository {
 
     private static final String CREATE_POWER_STATS_QUERY = "INSERT INTO power_stats" +
         " (strength, agility, dexterity, intelligence)" +
@@ -26,13 +27,15 @@ public class PowerStatsRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    UUID create(PowerStats powerStats) {
+    @Override
+    public UUID create(PowerStats powerStats) {
         return namedParameterJdbcTemplate.queryForObject(
             CREATE_POWER_STATS_QUERY,
             new BeanPropertySqlParameterSource(powerStats),
             UUID.class);
     }
 
+    @Override
     public UUID findByPowerStats(PowerStats powerStats) {
         Map<String, Object> params = new HashMap<>();
         params.put("strength", powerStats.getStrength());
@@ -51,6 +54,7 @@ public class PowerStatsRepository {
         }
     }
 
+    @Override
     public PowerStats findPowerStatsById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
 

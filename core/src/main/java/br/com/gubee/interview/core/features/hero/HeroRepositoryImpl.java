@@ -1,6 +1,6 @@
 package br.com.gubee.interview.core.features.hero;
 
-import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
+import br.com.gubee.interview.core.features.hero.interfaces.HeroRepository;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.PowerStats;
 import br.com.gubee.interview.model.dto.HeroDTO;
@@ -9,17 +9,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class HeroRepository {
+public class HeroRepositoryImpl implements HeroRepository {
 
     private static final String CREATE_HERO_QUERY = "INSERT INTO hero" +
             " (name, race, power_stats_id)" +
@@ -43,7 +43,7 @@ public class HeroRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    UUID create(Hero hero) {
+    public UUID create(Hero hero) {
         final Map<String, Object> params = Map.of("name", hero.getName(),
                 "race", hero.getRace().name(),
                 "powerStatsId", hero.getPowerStatsId());
@@ -54,7 +54,7 @@ public class HeroRepository {
                 UUID.class);
     }
 
-    HeroDTO findById(UUID id) {
+    public HeroDTO findById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
 
         try {
@@ -80,7 +80,7 @@ public class HeroRepository {
         }
     }
 
-    ArrayList<HeroDTO> findByName(String name) {
+    public List<HeroDTO> findByName(String name) {
         final String query = "%" + name + "%";
         final Map<String, Object> params = Map.of("name", query);
 
@@ -109,7 +109,7 @@ public class HeroRepository {
 
     }
 
-    void update(UUID id, HeroDTO hero) {
+    public void update(UUID id, HeroDTO hero) {
         final Map<String, Object> params = Map.of(
                 "id", id,
                 "name", hero.getName(),

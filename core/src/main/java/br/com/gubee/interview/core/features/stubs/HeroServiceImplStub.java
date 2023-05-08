@@ -1,37 +1,36 @@
-package br.com.gubee.interview.core.features.hero;
+package br.com.gubee.interview.core.features.stubs;
 
-import br.com.gubee.interview.core.features.powerstats.PowerStatsService;
+import br.com.gubee.interview.core.features.hero.HeroRepositoryImpl;
+import br.com.gubee.interview.core.features.hero.interfaces.HeroRepository;
+import br.com.gubee.interview.core.features.hero.interfaces.HeroService;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.dto.HeroDTO;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
 import br.com.gubee.interview.model.request.UpdateHeroRequest;
 import br.com.gubee.interview.model.response.ChangeInHeroResponse;
 import br.com.gubee.interview.model.response.CompareHeroesResponse;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-@Service
-@RequiredArgsConstructor
-public class HeroService {
+@Log4j2
+public class HeroServiceImplStub implements HeroService {
 
-    private final HeroRepository heroRepository;
-    private final PowerStatsService powerStatsService;
+    private final HeroRepository heroRepository = new HeroRepositoryImplStub();
 
-    @Transactional
+    @Override
     public UUID create(CreateHeroRequest createHeroRequest) {
-        UUID uuid = powerStatsService.verifyUuidForHero(createHeroRequest);
-
-        return heroRepository.create(new Hero(createHeroRequest, uuid));
+        Hero hero = new Hero(createHeroRequest, UUID.randomUUID());
+        log.info("Sending hero to database");
+        return heroRepository.create(hero);
     }
 
-
-    public ResponseEntity<HeroDTO> findById(UUID id) {
-        HeroDTO heroFounded = heroRepository.findById(id);
+    @Override
+    public ResponseEntity<HeroDTO> findById(UUID heroId) {
+        HeroDTO heroFounded = heroRepository.findById(heroId);
 
         if (heroFounded == null) {
             return ResponseEntity.notFound().build();
@@ -40,82 +39,65 @@ public class HeroService {
         return ResponseEntity.ok(heroFounded);
     }
 
-
-    public ResponseEntity<ArrayList<HeroDTO>> findByName(String name) {
-        ArrayList<HeroDTO> listOfHeroesFounded = heroRepository.findByName(name);
-
+    @Override
+    public ResponseEntity<List<HeroDTO>> findByName(String name) {
+        List<HeroDTO> listOfHeroesFounded = heroRepository.findByName(name);
+        if (listOfHeroesFounded == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(listOfHeroesFounded);
     }
 
-    @Transactional
+    @Override
     public ResponseEntity<ChangeInHeroResponse> update(UUID id, UpdateHeroRequest changesInHero) {
-        HeroDTO heroToAlter = heroRepository.findById(id);
+        HeroDTO hero = heroRepository.findById(id);
 
-        if (heroToAlter == null) {
+        if (hero == null) {
             return ResponseEntity.notFound().build();
         }
 
-        makeChangesInHeroFounded(changesInHero, heroToAlter);
-
-        heroRepository.update(id, heroToAlter);
-
-        return ResponseEntity.noContent().build();
-
-    }
-    private void makeChangesInHeroFounded(UpdateHeroRequest changesInHero, HeroDTO heroToAlter) {
-
-        heroToAlter.setEnabled(changesInHero.isEnabled());
+        hero.setEnabled(changesInHero.isEnabled());
 
         if (changesInHero.getName() != null) {
-            heroToAlter.setName(changesInHero.getName());
+            hero.setName(changesInHero.getName());
         }
         if (changesInHero.getRace() != null) {
-            heroToAlter.setRace(changesInHero.getRace());
+            hero.setRace(changesInHero.getRace());
         }
         if (changesInHero.getIntelligence() != null) {
-            heroToAlter.getPowerStats().setIntelligence(changesInHero.getIntelligence());
+            hero.getPowerStats().setIntelligence(changesInHero.getIntelligence());
         }
         if (changesInHero.getStrength() != null) {
-            heroToAlter.getPowerStats().setStrength(changesInHero.getStrength());
+            hero.getPowerStats().setStrength(changesInHero.getStrength());
         }
         if (changesInHero.getDexterity() != null) {
-            heroToAlter.getPowerStats().setDexterity(changesInHero.getDexterity());
+            hero.getPowerStats().setDexterity(changesInHero.getDexterity());
         }
         if (changesInHero.getAgility() != null) {
-            heroToAlter.getPowerStats().setAgility(changesInHero.getAgility());
+            hero.getPowerStats().setAgility(changesInHero.getAgility());
         }
 
 
-        heroToAlter.getPowerStats().setId(verifyPowerStatusUuidAttForHero(heroToAlter));
+        hero.getPowerStats().setId(hero.getPowerStats().getId());
 
+
+        return ResponseEntity.noContent().build();
     }
 
-    UUID verifyPowerStatusUuidAttForHero(HeroDTO heroFounded) {
-
-        UUID byPowerStats = powerStatsService.findUuidByPowerStats(heroFounded.getPowerStats());
-
-        if (byPowerStats == null) {
-            byPowerStats = powerStatsService.create(heroFounded.getPowerStats());
-        }
-
-        return byPowerStats;
-    }
-
-    @Transactional
+    @Override
     public ResponseEntity<?> delete(UUID heroId) {
-        HeroDTO heroFound = heroRepository.findById(heroId);
+        HeroDTO hero = heroRepository.findById(heroId);
 
-        if (heroFound == null) {
+        if (hero == null) {
             return ResponseEntity.notFound().build();
         }
 
         heroRepository.delete(heroId);
 
         return ResponseEntity.noContent().build();
-
     }
 
-
+    @Override
     public ResponseEntity<?> compare(UUID principalHero, UUID comparedHero) {
         HeroDTO firstHero = heroRepository.findById(principalHero);
         HeroDTO secondHero = heroRepository.findById(comparedHero);

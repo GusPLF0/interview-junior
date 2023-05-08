@@ -9,14 +9,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("it")
-public class HeroServiceIT {
+public class HeroServiceImplIT {
 
     @Autowired
-    private HeroService heroService;
+    private HeroServiceImpl heroServiceImpl;
 
     @Test
     public void createHeroWithAllRequiredArguments() {
-        heroService.create(createHeroRequest());
+        heroServiceImpl.create(createHeroRequest());
     }
 
     private CreateHeroRequest createHeroRequest() {
