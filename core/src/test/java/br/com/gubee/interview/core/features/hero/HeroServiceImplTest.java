@@ -151,31 +151,4 @@ class HeroServiceImplTest {
         assertThat(updateResponse.getBody()).isNull();
     }
 
-    @Test
-    void testUpdate_HeroRepositoryFindByIdReturnsNull() {
-    }
-
-    @Test
-    void testUpdate_PowerStatsServiceFindUuidByPowerStatsReturnsNull() {
-    }
-
-    @Test
-    void testVerifyPowerStatusUuidAttForHero() {
-    }
-
-    @Test
-    void testVerifyPowerStatusUuidAttForHero_PowerStatsServiceFindUuidByPowerStatsReturnsNull() {
-    }
-
-    @Test
-    void testDelete() {
-    }
-
-    @Test
-    void testDelete_HeroRepositoryFindByIdReturnsNull() {
-    }
-
-    @Test
-    void testCompare() {
-    }
 }
