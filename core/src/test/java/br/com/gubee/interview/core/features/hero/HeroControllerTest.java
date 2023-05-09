@@ -1,19 +1,17 @@
 package br.com.gubee.interview.core.features.hero;
 
 import br.com.gubee.interview.core.features.hero.interfaces.HeroService;
-import br.com.gubee.interview.core.features.stubs.HeroServiceImplStub;
+import br.com.gubee.interview.core.features.stubs.hero.HeroServiceImplStub;
 import br.com.gubee.interview.model.PowerStats;
 import br.com.gubee.interview.model.dto.HeroDTO;
 import br.com.gubee.interview.model.enums.Race;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
 import br.com.gubee.interview.model.request.UpdateHeroRequest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +45,7 @@ class HeroControllerTest {
     }
 
     @Test
-    void shouldCreateAHero_WhenCreateRequestWasSended_ThenReturnCorrectStatusCode() {
+    void shouldReturnTheCorrectResponse_WhenCreateAHeroRequestWasSended() {
         //given
         CreateHeroRequest hero = CreateHeroRequest.builder()
                 .name("Batman")
@@ -66,7 +64,7 @@ class HeroControllerTest {
     }
 
     @Test
-    void shouldFindAHeroById_WhenAnIdOfASavedHeroInTheDatabaseIsPassed_ThenReturnTheFoundedHeroInBodyAndOkStatusCode() {
+    void shouldReturnTheCorrectResponse_WhenFindAHeroByIdRequestWasSendedWithAnIdOfASavedHeroInTheDatabaseIsPassed() {
         //given
 
         UUID idToSearch = FIXED_UUID;
@@ -83,7 +81,7 @@ class HeroControllerTest {
     }
 
     @Test
-    void shouldNotFindAHeroById_WhenAnIdOfAnUnsavedHeroIsPassed_ThenReturnNullInBodyAndNotFoundStatusCode() {
+    void shouldReturnTheCorrectResponse_WhenFindAHeroByIdRequestWasSendedWithAnIdOfAnUnsavedHeroIsPassed() {
         //given
 
         UUID idToSearch = UUID.randomUUID();
@@ -98,7 +96,7 @@ class HeroControllerTest {
     }
 
     @Test
-    void shouldFindAHeroByName_WhenTheHeroWithNameGivedIsInTheDatabase_ThenReturnTheDataOfTheHeroInTheBodyWithOkStatusCode() {
+    void shouldReturnTheCorrectResponse_WhenFindAHeroByNameRequestWasSendedAndTheHeroWithNameGivedIsInTheDatabase() {
         //given
         String nameToSearch = "Aleatorio";
 
@@ -112,7 +110,7 @@ class HeroControllerTest {
     }
 
     @Test
-    void shouldFindAHeroByName_WhenTheHeroWithPartOfTheNameGivedIsInTheDatabase_ThenReturnTheDataOfTheHeroInTheBodyWithOkStatusCode() {
+    void shouldReturnTheCorrectResponse_WhenFindAHeroByNameRequestWasSendedAndTheHeroWithPartOfTheNameGivedIsInTheDatabase() {
         //given
         String nameToSearch = "Ale";
 

@@ -1,6 +1,5 @@
-package br.com.gubee.interview.core.features.stubs;
+package br.com.gubee.interview.core.features.stubs.hero;
 
-import br.com.gubee.interview.core.features.hero.HeroRepositoryImpl;
 import br.com.gubee.interview.core.features.hero.interfaces.HeroRepository;
 import br.com.gubee.interview.core.features.hero.interfaces.HeroService;
 import br.com.gubee.interview.model.Hero;
@@ -12,7 +11,6 @@ import br.com.gubee.interview.model.response.CompareHeroesResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
