@@ -23,25 +23,25 @@ public class PowerStatsServiceImpl implements PowerStatsService {
     }
 
     @Override
-    public PowerStats createPowerStatsWithHeroRequest(CreateHeroRequest createHeroRequest) {
-        return PowerStats.builder()
-                .agility(createHeroRequest.getAgility())
-                .strength(createHeroRequest.getStrength())
-                .intelligence(createHeroRequest.getIntelligence())
-                .dexterity(createHeroRequest.getDexterity()).build();
-    }
-
-    @Override
     public UUID verifyUuidForHero(CreateHeroRequest createHeroRequest) {
         PowerStats powerStatsWithHeroRequest = createPowerStatsWithHeroRequest(createHeroRequest);
 
-        UUID uuid = powerStatsRepositoryImpl.findByPowerStats(powerStatsWithHeroRequest);
+        UUID uuid = this.findUuidByPowerStats(powerStatsWithHeroRequest);
 
         if (uuid != null) {
             return uuid;
         }
 
         return powerStatsRepositoryImpl.create(powerStatsWithHeroRequest);
+    }
+
+    @Override
+    public PowerStats createPowerStatsWithHeroRequest(CreateHeroRequest createHeroRequest) {
+        return PowerStats.builder()
+                .agility(createHeroRequest.getAgility())
+                .strength(createHeroRequest.getStrength())
+                .intelligence(createHeroRequest.getIntelligence())
+                .dexterity(createHeroRequest.getDexterity()).build();
     }
 
     @Override

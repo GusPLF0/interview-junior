@@ -24,7 +24,10 @@ public class PowerStatsRepositoryImplStub implements PowerStatsRepository {
 
     @Override
     public UUID findByPowerStats(PowerStats powerStats) {
-        if (powerStats.equals(fixedPowerStats)) {
+        if (powerStats.getIntelligence() == fixedPowerStats.getIntelligence() &&
+                powerStats.getAgility() == fixedPowerStats.getAgility() &&
+                powerStats.getDexterity() == fixedPowerStats.getDexterity() &&
+                powerStats.getStrength() == fixedPowerStats.getStrength()) {
             return FIXED_UUID;
         }
         return null;
@@ -32,6 +35,9 @@ public class PowerStatsRepositoryImplStub implements PowerStatsRepository {
 
     @Override
     public PowerStats findPowerStatsById(UUID id) {
+        if (fixedPowerStats.getId().equals(id)) {
+            return fixedPowerStats;
+        }
         return null;
     }
 }
