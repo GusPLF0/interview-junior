@@ -10,23 +10,18 @@ import br.com.gubee.interview.model.enums.Race;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
 import br.com.gubee.interview.model.request.UpdateHeroRequest;
 import br.com.gubee.interview.model.response.ChangeInHeroResponse;
+import br.com.gubee.interview.model.response.CompareHeroesResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.list;
-import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
 class HeroServiceImplTest {
 
     UUID FIXED_UUID = UUID.fromString("124fb970-d1fb-4467-ab6b-32c5411f1216");
@@ -123,7 +118,7 @@ class HeroServiceImplTest {
     }
 
     @Test
-    void shouldBeAbleToUpdateAHero_WhenAllFieldsNeedToUpdate () {
+    void shouldBeAbleToUpdateAHero_WhenAllFieldsNeedToUpdate() {
         //given
         UpdateHeroRequest updateHeroRequest = UpdateHeroRequest.builder()
                 .name("Flash")
@@ -140,7 +135,7 @@ class HeroServiceImplTest {
     }
 
     @Test
-    void shouldBeAbleToUpdateAHero_WhenOneFieldNeedsToUpdate () {
+    void shouldBeAbleToUpdateAHero_WhenOneFieldNeedsToUpdate() {
         //given
         UpdateHeroRequest updateHeroRequest = UpdateHeroRequest.builder()
                 .name("Flash").build();
@@ -149,6 +144,59 @@ class HeroServiceImplTest {
         //then
         assertThat(updateResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(updateResponse.getBody()).isNull();
+    }
+
+    @Test
+    void shouldBeAbleToDeleteAHero_WhenAExistentUuidInDataBaseIsPassed() {
+        //given
+
+        //when
+        ResponseEntity<?> deleteResponse = subject.delete(FIXED_UUID);
+        //then
+        assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(deleteResponse.getBody()).isNull();
+    }
+
+    @Test
+    void shouldNotBeAbleToDeleteAHero_WhenANonExistentUuidInDataBaseIsPassed() {
+        //given
+
+        //when
+        ResponseEntity<?> delete = subject.delete(UUID.randomUUID());
+        //then
+        assertThat(delete.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(delete.getBody()).isNull();
+    }
+
+    @Test
+    void shouldCompareTwoHeroes_WhenTheTwoUuidPassedExistsInDatabase() {
+        //given
+
+        UUID heroOne = FIXED_UUID;
+        UUID heroTwo = FIXED_UUID;
+        //when
+
+        ResponseEntity<?> compare = subject.compare(heroOne, heroTwo);
+        //then
+
+        assertThat(compare.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(compare.getBody().getClass()).isEqualTo(CompareHeroesResponse.class);
+
+    }
+
+    @Test
+    void shouldNotCompareTwoHeroes_WhenOneOrBothUuidPassedDoentExistsInDatabase() {
+        //given
+
+        UUID heroOne = UUID.randomUUID();
+        UUID heroTwo = FIXED_UUID;
+        //when
+
+        ResponseEntity<?> compare = subject.compare(heroOne, heroTwo);
+        //then
+
+        assertThat(compare.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(compare.getBody()).isNull();
     }
 
 }

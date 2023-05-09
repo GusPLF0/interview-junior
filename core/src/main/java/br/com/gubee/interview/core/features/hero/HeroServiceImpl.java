@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -121,7 +120,16 @@ public class HeroServiceImpl implements HeroService {
 
     public ResponseEntity<?> compare(UUID principalHero, UUID comparedHero) {
         HeroDTO firstHero = heroRepositoryImpl.findById(principalHero);
+
+        if (firstHero == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         HeroDTO secondHero = heroRepositoryImpl.findById(comparedHero);
+
+        if (secondHero == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         return ResponseEntity.ok(buildComparation(firstHero, secondHero));
 

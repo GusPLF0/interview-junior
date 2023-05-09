@@ -4,6 +4,7 @@ import br.com.gubee.interview.core.features.hero.interfaces.HeroService;
 import br.com.gubee.interview.model.dto.HeroDTO;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
 import br.com.gubee.interview.model.request.UpdateHeroRequest;
+import br.com.gubee.interview.model.response.CompareHeroesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
