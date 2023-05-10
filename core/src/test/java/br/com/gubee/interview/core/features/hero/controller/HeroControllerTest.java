@@ -1,5 +1,6 @@
-package br.com.gubee.interview.core.features.hero;
+package br.com.gubee.interview.core.features.hero.controller;
 
+import br.com.gubee.interview.core.features.hero.HeroController;
 import br.com.gubee.interview.core.features.hero.interfaces.HeroService;
 import br.com.gubee.interview.core.features.stubs.hero.HeroServiceImplStub;
 import br.com.gubee.interview.model.PowerStats;

@@ -85,7 +85,7 @@ public class HeroRepositoryImpl implements HeroRepository {
         final Map<String, Object> params = Map.of("name", query);
 
         try {
-            return (ArrayList<HeroDTO>) namedParameterJdbcTemplate.query(
+            return namedParameterJdbcTemplate.query(
                     FIND_BY_NAME_QUERY,
                     params,
                     (rs, rowNum) -> HeroDTO.builder()
