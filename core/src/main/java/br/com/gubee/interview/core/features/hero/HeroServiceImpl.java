@@ -22,7 +22,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HeroServiceImpl implements HeroService {
 
+    @Autowired
     private final HeroRepository heroRepositoryImpl;
+    @Autowired
     private final PowerStatsService powerStatsServiceImpl;
 
     @Transactional
